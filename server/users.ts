@@ -24,12 +24,25 @@ export const signIn = async (email: string, password: string) => {
     }
 }
 
-export const signUp = async ({ email, password, name }: { email: string, password: string, name: string }) => {
-    await auth.api.signUpEmail({
-        body: {
-            email,
-            password,
-            name
+export const signUp = async (email: string, password: string, name: string) => {
+    try {
+        await auth.api.signUpEmail({
+            body: {
+                email,
+                password,
+                name
+            }
+        })
+
+        return {
+            success: true,
+            message: 'User signed up successfully'
         }
-    })
+    } catch (error) {
+        const e = error as Error
+        return {
+            success: false,
+            message: e.message || 'Unknown error occurred'
+        }
+    }
 }

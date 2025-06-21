@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -21,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { signIn } from "@/server/users"
+import { signUp } from "@/server/users"
 import { z } from "zod"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
@@ -30,11 +29,12 @@ import { Loader2 } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
 
 const formSchema = z.object({
+  username: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(8)
 })
 
-export function LoginForm({
+export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -44,6 +44,7 @@ export function LoginForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
     },
@@ -60,7 +61,7 @@ export function LoginForm({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    const { success, message } = await signIn(values.email, values.password)
+    const { success, message } = await signUp(values.email, values.password, values.username)
 
     if (success) {
       toast.success(message as string)
@@ -75,10 +76,7 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>
-            Login with your Google account
-          </CardDescription>
+          <CardTitle className="text-xl">Create account</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -92,7 +90,7 @@ export function LoginForm({
                         fill="currentColor"
                       />
                     </svg>
-                    Login with Google
+                    Sign up with Google
                   </Button>
                 </div>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -102,6 +100,19 @@ export function LoginForm({
                 </div>
                 <div className="grid gap-6">
                   <div className="grid gap-3">
+                    <FormField
+                      control={form.control}
+                      name="username"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Username</FormLabel>
+                          <FormControl>
+                            <Input placeholder="username" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <FormField
                       control={form.control}
                       name="email"
@@ -131,22 +142,16 @@ export function LoginForm({
                           </FormItem>
                         )}
                       />
-                      <a
-                        href="#"
-                        className="ml-auto text-sm underline-offset-4 hover:underline"
-                      >
-                        Forgot your password?
-                      </a>
                     </div>
                   </div>
                   <Button className="w-full" type="submit" disabled={isLoading}>
-                    {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Login'}
+                    {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Create account'}
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Don&apos;t have an account?{" "}
-                  <a href="/signup" className="underline underline-offset-4">
-                    Sign up
+                  You have an account?{" "}
+                  <a href="/login" className="underline underline-offset-4">
+                    Login
                   </a>
                 </div>
               </div>
