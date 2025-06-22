@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input"
 import { z } from "zod"
 import { toast } from "sonner"
 import { useState } from "react"
-import { Loader2 } from "lucide-react"
+import { Loader2, LockKeyholeIcon } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
 
 const formSchema = z.object({
@@ -54,7 +54,7 @@ export function ForgotPasswordForm({
         if (error) {
             toast.error(error.message)
         } else {
-            toast.success("Password reset email sent")
+            toast.success("If that email is registered, we've sent a reset link.")
         }
 
         setIsLoading(false)
@@ -64,9 +64,12 @@ export function ForgotPasswordForm({
         <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Welcome back</CardTitle>
+                    <div className="grid place-content-center size-14 rounded-full bg-muted/25 mx-auto border border-muted-foreground/10">
+                        <LockKeyholeIcon className="size-5 text-muted-foreground" />
+                    </div>
+                    <CardTitle className="text-xl">Reset Password</CardTitle>
                     <CardDescription>
-                        Insert an email to send a password reset link
+                        Enter your email to reset your password
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -102,10 +105,6 @@ export function ForgotPasswordForm({
                     </Form>
                 </CardContent>
             </Card>
-            <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-                By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-                and <a href="#">Privacy Policy</a>.
-            </div>
         </div>
     )
 }
