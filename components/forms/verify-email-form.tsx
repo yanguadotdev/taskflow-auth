@@ -12,6 +12,8 @@ import { toast } from "sonner"
 import { useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { useSearchParams } from "next/navigation"
+import Lottie from "lottie-react";
+import emailVerificationAnimation from "@/public/lotties/verify-email.json"
 
 export function VerifyEmailForm({
     className,
@@ -41,20 +43,25 @@ export function VerifyEmailForm({
         <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Email Verification</CardTitle>
+                    <CardTitle className="text-xl">Just One More Step</CardTitle>
+                    <Lottie
+                        loop={false}
+                        animationData={emailVerificationAnimation}
+                        className="mx-auto size-56"
+                    />
                     <CardDescription>
-                        We have sent a verification link to <strong>{emailToVerify}</strong> it will expire shortly, so please verify right now
+                        We sent a confirmation email to: <strong>{emailToVerify}</strong> Check your email and click on the confirmation link to continue
                     </CardDescription>
-                    <CardDescription>
-                        You didn't get the email?
+                    <CardDescription className="leading-none mt-6">
+                        If you still don&apos;t see it, you can
                         <Button
                             type="button"
                             variant="link"
                             disabled={isLoading}
-                            className="mt-6 px-2 cursor-pointer"
+                            className="p-2 h-auto py-1 cursor-pointer"
                             onClick={onSubmit}
                         >
-                            Resend Email
+                            Resend the confirmation email
                         </Button>
                     </CardDescription>
                 </CardHeader>

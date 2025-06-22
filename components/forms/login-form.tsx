@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
+import Link from "next/link"
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email" }),
@@ -76,11 +77,13 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className="gap-4">
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>
-            Login with your Google account
+          <CardTitle className="text-2xl">Welcome back</CardTitle>
+          <CardDescription className="leading-tight">
+            Glad to see you again 🎉
+            <br />
+            Login to your account below
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -95,7 +98,7 @@ export function LoginForm({
                         fill="currentColor"
                       />
                     </svg>
-                    Login with Google
+                    Continue with Google
                   </Button>
                 </div>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -146,21 +149,17 @@ export function LoginForm({
                     {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Login'}
                   </Button>
                 </div>
-                <div className="text-center text-sm">
+                <div className="text-center text-sm text-muted-foreground leading-none">
                   Don&apos;t have an account?{" "}
-                  <a href="/signup" className="underline underline-offset-4">
-                    Sign up
-                  </a>
+                  <Link href="/signup" className="hover:underline underline-offset-4 text-black px-1">
+                    Sign up For Free
+                  </Link>
                 </div>
               </div>
             </form>
           </Form>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </div>
     </div>
   )
 }

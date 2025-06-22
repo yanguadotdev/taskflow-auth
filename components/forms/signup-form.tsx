@@ -19,7 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { Input, PasswordInput } from "@/components/ui/input"
 import { signUp } from "@/server/users"
 import { z } from "zod"
 import { toast } from "sonner"
@@ -27,6 +27,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
+import Link from "next/link"
 
 const formSchema = z.object({
   username: z.string().min(3),
@@ -74,7 +75,7 @@ export function SignupForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className="gap-3">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Create account</CardTitle>
         </CardHeader>
@@ -136,7 +137,7 @@ export function SignupForm({
                           <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                              <Input type="password" placeholder="************" {...field} />
+                              <PasswordInput {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -148,21 +149,17 @@ export function SignupForm({
                     {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Create account'}
                   </Button>
                 </div>
-                <div className="text-center text-sm">
+                <div className="text-center text-sm text-muted-foreground leading-none">
                   You have an account?{" "}
-                  <a href="/login" className="underline underline-offset-4">
+                  <Link href="/login" className="hover:underline px-1 text-black underline-offset-4">
                     Login
-                  </a>
+                  </Link>
                 </div>
               </div>
             </form>
           </Form>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </div>
     </div>
   )
 }
