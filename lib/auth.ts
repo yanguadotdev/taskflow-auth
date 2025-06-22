@@ -5,6 +5,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { Resend } from "resend";
 import ForgotPasswordEmail from "@/components/emails/reset-password";
+import EmailVerificationTemplate from "@/components/emails/email-verification";
 
 const resend = new Resend(process.env.RESEND_API_KEY as string)
 
@@ -17,14 +18,37 @@ export const auth = betterAuth({
     },
     emailAndPassword: {
         enabled: true,
+        requireEmailVerification: true,
         sendResetPassword: async ({ user, url }) => {
             resend.emails.send({
-                from: "Yangua <hey@yangua.dev>",
+                from: "RESEND <onboarding@resend.dev>",
                 to: user.email,
                 subject: "Reset your password",
                 react: ForgotPasswordEmail({ resetUrl: url, userEmail: user.email }),
             })
         },
+    },
+    emailVerification: {
+        sendOnSignUp: true,
+        autoSignInAfterVerification: true,
+        onEmailVerification: async () => {
+            console.log('onVerificationSuccess')
+        },
+        sendVerificationEmail: async ({ user, url }) => {
+            const verificationUrl = new URL(url)
+            verificationUrl.searchParams.set('callbackURL', '/dashboard')
+
+            resend.emails.send({
+                to: user.email,
+                from: "RESEND <onboarding@resend.dev>",
+                subject: "Verify your email",
+                react: EmailVerificationTemplate({
+                    userName: user.name,
+                    userEmail: user.email,
+                    verificationUrl: verificationUrl.toString()
+                }),
+            })
+        }
     },
     database: drizzleAdapter(db, {
         provider: "pg",

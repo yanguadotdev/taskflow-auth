@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
     Html,
     Head,
@@ -102,11 +101,6 @@ const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
             </Tailwind>
         </Html>
     );
-};
-
-ForgotPasswordEmail.PreviewProps = {
-    username: "yanguasamir05@gmail.com",
-    token: "https://yourapp.com/reset-password?token=abc123",
 };
 
 export default ForgotPasswordEmail;

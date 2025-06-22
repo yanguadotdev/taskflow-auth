@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Mulish, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner"
 
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const mulish = Mulish({
+  variable: "--font-mulish",
   subsets: ["latin"],
 });
 
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${mulish.variable} ${geistMono.variable} antialiased`}
       >
         {children}
         <Toaster />

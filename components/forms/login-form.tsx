@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { Input, PasswordInput } from "@/components/ui/input"
 import { signIn } from "@/server/users"
 import { z } from "zod"
 import { toast } from "sonner"
@@ -30,8 +30,8 @@ import { Loader2 } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
 
 const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8)
+  email: z.string().email({ message: "Please enter a valid email" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters long" })
 })
 
 export function LoginForm({
@@ -67,6 +67,9 @@ export function LoginForm({
       router.push('/dashboard')
     } else {
       toast.error(message as string)
+      if (message === "Email not verified") {
+        router.push('/verify-email?email=' + values.email)
+      }
     }
     setIsLoading(false)
   }
@@ -125,7 +128,7 @@ export function LoginForm({
                           <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                              <Input type="password" placeholder="************" {...field} />
+                              <PasswordInput {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

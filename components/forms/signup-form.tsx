@@ -65,7 +65,7 @@ export function SignupForm({
 
     if (success) {
       toast.success(message as string)
-      router.push('/dashboard')
+      router.push('/verify-email?email=' + values.email)
     } else {
       toast.error(message as string)
     }

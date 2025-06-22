@@ -1,4 +1,4 @@
-import { GalleryVerticalEnd } from "lucide-react"
+import { ListChecks } from "lucide-react"
 
 import { SignupForm } from "@/components/forms/signup-form"
 
@@ -8,9 +8,9 @@ export default function SignupPage() {
       <div className="flex w-full max-w-sm flex-col gap-6">
         <a href="#" className="flex items-center gap-2 self-center font-medium">
           <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <GalleryVerticalEnd className="size-4" />
+            <ListChecks className="size-4" />
           </div>
-          Acme Inc.
+          TaskFlow.
         </a>
         <SignupForm />
       </div>
