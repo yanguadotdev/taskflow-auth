@@ -19,6 +19,19 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
+    if (url.pathname == '/reset-password') {
+        if (sessionCookie) {
+            return NextResponse.redirect(new URL('/dashboard', request.url));
+        }
+
+        const token = url.searchParams.get('token')
+        if (!token) {
+            return NextResponse.redirect(new URL("/", request.url));
+        }
+
+        return NextResponse.next();
+    }
+
     if (!sessionCookie) {
         return NextResponse.redirect(new URL("/", request.url));
     }
@@ -27,5 +40,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/dashboard", "/verify-email"],
+    matcher: ["/dashboard", "/verify-email", "/reset-password"],
 };
