@@ -2,9 +2,17 @@ import { ListChecks } from "lucide-react"
 
 import { VerifyEmailForm } from "@/components/forms/verify-email-form"
 import { redirect } from "next/navigation"
+import { isUserAuthenticated } from "@/lib/auth-client"
 
-export default function VerifyEmailPage({ searchParams }: { searchParams: { email: string } }) {
-    if (!searchParams.email) {
+export default async function VerifyEmailPage({ searchParams }: { searchParams: { email: string } }) {
+
+    const isAuthenticated = await isUserAuthenticated()
+    if (isAuthenticated) {
+        redirect('/dashboard')
+    }
+
+    const params = await searchParams
+    if (!params.email) {
         redirect('/')
     }
     return (

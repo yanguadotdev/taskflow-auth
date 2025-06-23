@@ -10,7 +10,6 @@ export const signIn = async (email: string, password: string) => {
                 password
             }
         })
-
         return {
             success: true,
             message: 'User signed in successfully'
