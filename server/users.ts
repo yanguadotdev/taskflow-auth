@@ -25,11 +25,13 @@ export const signIn = async (email: string, password: string) => {
 
 export const signUp = async (email: string, password: string, name: string) => {
     try {
+        const urlAvatar = `https://api.dicebear.com/8.x/initials/svg?seed=${name}`
         await auth.api.signUpEmail({
             body: {
+                name,
                 email,
                 password,
-                name
+                image: urlAvatar
             }
         })
 
