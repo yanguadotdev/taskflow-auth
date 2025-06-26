@@ -6,6 +6,7 @@ import { eq } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import { revalidatePath } from 'next/cache';
 
 const getSession = async () => {
   const headerList = await headers()
@@ -34,6 +35,8 @@ export const createTask = async (title: string) => {
     userId: session.user.id,
     title,
   });
+
+  revalidatePath('/dashboard');
 };
 
 export const deleteTask = async (id: string) => {
@@ -41,4 +44,6 @@ export const deleteTask = async (id: string) => {
   if (!session) throw new Error('Unauthorized');
 
   await db.delete(tasks).where(eq(tasks.id, id));
+
+  revalidatePath('/dashboard');
 };
