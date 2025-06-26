@@ -1,5 +1,6 @@
 import { ListChecks } from "lucide-react";
 import { AvatarDropdown } from "@/components/ui/AvatarDropdown";
+import Tasks from "@/components/Tasks";
 
 export default function Dashboard() {
     return (
@@ -14,6 +15,8 @@ export default function Dashboard() {
 
                 <AvatarDropdown />
             </header>
+
+            <Tasks />
         </div>
     )
 }

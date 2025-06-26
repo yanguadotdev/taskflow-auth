@@ -46,5 +46,18 @@ export const verification = pgTable("verification", {
     updatedAt: timestamp('updated_at').$defaultFn(() => /* @__PURE__ */ new Date())
 });
 
+export const tasks = pgTable('tasks', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => user.id),
+  title: text('title').notNull(),
+  description: text('description'),
+  status: text('status').default('pending'),
+  completedSteps: integer('completed_steps').default(0),
+  totalSteps: integer('total_steps').default(1),
+  isPriority: boolean('is_priority').default(false),
+  createdAt: timestamp('created_at').defaultNow(),
+});
 
-export const schema = {user, session, account, verification}
+
+
+export const schema = {user, session, account, verification, tasks}

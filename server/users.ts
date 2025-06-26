@@ -32,7 +32,7 @@ export const signUp = async (email: string, password: string, name: string) => {
                 email,
                 password,
                 image: urlAvatar
-            }
+            } as any
         })
 
         return {
