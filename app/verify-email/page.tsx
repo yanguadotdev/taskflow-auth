@@ -1,6 +1,7 @@
 import { ListChecks } from "lucide-react"
 
 import { VerifyEmailForm } from "@/components/forms/verify-email-form"
+import { Suspense } from "react"
 
 export default function VerifyEmailPage() {
     return (
@@ -12,7 +13,9 @@ export default function VerifyEmailPage() {
                     </div>
                     TaskFlow.
                 </a>
-                <VerifyEmailForm />
+                <Suspense>
+                    <VerifyEmailForm />
+                </Suspense>
             </div>
         </div>
     )

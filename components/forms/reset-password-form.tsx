@@ -29,8 +29,13 @@ import { authClient } from "@/lib/auth-client"
 import { useSearchParams, useRouter } from "next/navigation"
 
 const formSchema = z.object({
-    password: z.string().min(8),
+    password: z.string()
+        .min(8, "Password must be at least 8 characters")
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, "Password must contain at least one uppercase letter, one lowercase letter, and one number"),
     confirmPassword: z.string().min(8)
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
 })
 
 export function ResetPasswordForm({
@@ -39,10 +44,11 @@ export function ResetPasswordForm({
 }: React.ComponentProps<"div">) {
 
     const searchParams = useSearchParams()
-    const token = searchParams.get("token") as string
+    const token = searchParams.get("token")
     const router = useRouter()
 
     const [isLoading, setIsLoading] = useState(false)
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -52,26 +58,35 @@ export function ResetPasswordForm({
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        setIsLoading(true)
-        if (values.password !== values.confirmPassword) {
-            toast.error("Passwords do not match")
-            setIsLoading(false)
+        if (!token) {
+            toast.error("Invalid reset token")
             return
         }
 
-        const { error } = await authClient.resetPassword({
-            newPassword: values.password,
-            token,
-        })
+        setIsLoading(true)
 
-        if (error) {
-            toast.error(error.message)
-        } else {
-            toast.success("Password reset successfully")
-            router.push("/login")
+        try {
+            const { error } = await authClient.resetPassword({
+                newPassword: values.password,
+                token,
+            })
+
+            if (error) {
+                toast.error(error.message || "Failed to reset password")
+            } else {
+                toast.success("Password reset successfully")
+                router.push("/login")
+            }
+        } catch (error) {
+            toast.error("An unexpected error occurred")
+            console.error("Reset password error:", error)
+        } finally {
+            setIsLoading(false)
         }
+    }
 
-        setIsLoading(false)
+    if (!token) {
+        return null
     }
 
     return (
@@ -80,55 +95,68 @@ export function ResetPasswordForm({
                 <CardHeader className="text-center">
                     <CardTitle className="text-xl">Reset Password</CardTitle>
                     <CardDescription>
-                        Insert your new password
+                        Enter your new password
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                            <div className="grid gap-6">
-                                <div className="grid gap-3">
-                                    <FormField
-                                        control={form.control}
-                                        name="password"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Password</FormLabel>
-                                                <FormControl>
-                                                    <Input type="password" placeholder="************" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                                <div className="grid gap-3">
-                                    <FormField
-                                        control={form.control}
-                                        name="confirmPassword"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Confirm Password</FormLabel>
-                                                <FormControl>
-                                                    <Input type="password" placeholder="************" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                                <Button className="w-full" type="submit" disabled={isLoading}>
-                                    {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Reset Password'}
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                            <div className="grid gap-4">
+                                <FormField
+                                    control={form.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>New Password</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="password"
+                                                    placeholder="Enter your new password"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="confirmPassword"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Confirm New Password</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="password"
+                                                    placeholder="Confirm your new password"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <Button
+                                    className="w-full"
+                                    type="submit"
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="size-4 animate-spin mr-2" />
+                                            Reset Password
+                                        </>
+                                    ) : (
+                                        'Reset Password'
+                                    )}
                                 </Button>
                             </div>
                         </form>
                     </Form>
                 </CardContent>
             </Card>
-            <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-                By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-                and <a href="#">Privacy Policy</a>.
-            </div>
         </div>
     )
 }
