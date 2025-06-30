@@ -65,7 +65,7 @@ export function SignupForm({
     const { success, message } = await signUp(values.email, values.password, values.username)
 
     if (success) {
-      toast.success(message as string)
+      toast.success('Please check your email to verify your account')
       router.push('/verify-email?email=' + values.email)
     } else {
       toast.error(message as string)
