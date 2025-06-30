@@ -16,14 +16,14 @@ export function getBaseURL(): string {
     return window.location.origin
   }
 
-  // Vercel deployment
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`
-  }
-
   // Custom environment variable
   if (process.env.BETTER_AUTH_URL) {
     return process.env.BETTER_AUTH_URL
+  }
+
+  // Vercel deployment (fallback to deployment URL)
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
   }
 
   // Development fallback
