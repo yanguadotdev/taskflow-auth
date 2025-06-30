@@ -6,10 +6,12 @@ import { nextCookies } from "better-auth/next-js";
 import { Resend } from "resend";
 import ForgotPasswordEmail from "@/components/emails/reset-password";
 import EmailVerificationTemplate from "@/components/emails/email-verification";
+import { getBaseURL } from "./utils";
 
 const resend = new Resend(process.env.RESEND_API_KEY as string)
 
 export const auth = betterAuth({
+    baseURL: getBaseURL(),
     socialProviders: {
         google: {
             clientId: process.env.GOOGLE_CLIENT_ID as string,
