@@ -79,7 +79,7 @@ const EmailVerificationTemplate = (props: EmailVerificationTemplateProps) => {
                         {/* Info Notice */}
                         <Section className="bg-gray-50 border-l-[4px] border-solid border-gray-400 p-[16px] rounded-[4px] mb-[32px]">
                             <Text className="text-[14px] text-gray-700 leading-[20px] m-0">
-                                <strong>Note:</strong> If you didn't create an account with us, you can safely ignore this email. No account will be created without verification.
+                                <strong>Note:</strong> If you didn&apos;t create an account with us, you can safely ignore this email. No account will be created without verification.
                             </Text>
                         </Section>
 
