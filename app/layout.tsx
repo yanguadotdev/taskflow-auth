@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Mulish, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/features/shared/ui/sonner"
 
 
 const mulish = Mulish({
