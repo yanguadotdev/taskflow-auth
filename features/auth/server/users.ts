@@ -1,49 +1,46 @@
 'use server'
-
 import { auth } from '@/features/auth/lib/auth'
+import {} from 'better-auth'
 
 export const signIn = async (email: string, password: string) => {
-    try {
-        await auth.api.signInEmail({
-            body: {
-                email,
-                password
-            }
-        })
-        return {
-            success: true,
-            message: 'User signed in successfully'
-        }
-    } catch (error) {
-        const e = error as Error
-        return {
-            success: false,
-            message: e.message || 'Unknown error occurred'
-        }
+  try {
+    await auth.api.signInEmail({
+      body: {
+        email,
+        password,
+      },
+    })
+    return {
+      success: true,
+      message: 'User signed in successfully',
     }
+  } catch (error) {
+    const e = error as Error
+    return {
+      success: false,
+      message: e.message || 'Unknown error occurred',
+    }
+  }
 }
 
 export const signUp = async (email: string, password: string, name: string) => {
-    try {
-        const urlAvatar = `https://api.dicebear.com/8.x/initials/svg?seed=${name}`
-        await auth.api.signUpEmail({
-            body: {
-                name,
-                email,
-                password,
-                image: urlAvatar
-            } as any
-        })
+  try {
+    const urlAvatar = `https://api.dicebear.com/8.x/initials/svg?seed=${name}`
+    const baseBody = { name, email, password }
+    const bodyWithImage = Object.assign(baseBody, { image: urlAvatar })
+    await auth.api.signUpEmail({
+      body: bodyWithImage
+    })
 
-        return {
-            success: true,
-            message: 'User signed up successfully'
-        }
-    } catch (error) {
-        const e = error as Error
-        return {
-            success: false,
-            message: e.message || 'Unknown error occurred'
-        }
+    return {
+      success: true,
+      message: 'User signed up successfully',
     }
+  } catch (error) {
+    const e = error as Error
+    return {
+      success: false,
+      message: e.message || 'Unknown error occurred',
+    }
+  }
 }

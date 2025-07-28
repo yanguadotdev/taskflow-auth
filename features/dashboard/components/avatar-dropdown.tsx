@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Button } from '@/features/shared/ui/button'
+import { Button } from '@feat/shared/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,17 +9,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/features/shared/ui/dropdown-menu'
-import { Logout } from '@/features/dashboard/components'
-import { auth } from '@/features/auth/lib/auth'
-import { headers } from 'next/headers'
+import { Logout } from '@feat/dashboard/components'
+import { verifyUser } from '@dal/user/verify-user'
 
 async function AvatarDropdown() {
-  const headersList = await headers()
-  const session = await auth.api.getSession({
-    headers: headersList,
-  })
-  const user = session?.user
-  console.log(user?.image)
+  const user = await verifyUser()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
