@@ -8,10 +8,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/features/shared/ui/dropdown-menu'
-import { Logout } from '@feat/dashboard/components'
+} from '@feat/shared/ui/dropdown-menu'
+import { Logout } from '@feat/shared/components'
 import { verifyUser } from '@dal/user/verify-user'
-
 async function AvatarDropdown() {
   const user = await verifyUser()
   return (

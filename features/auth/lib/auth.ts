@@ -12,6 +12,12 @@ import { getBaseURL } from '@/features/shared/utils'
 
 const resend = new Resend(process.env.RESEND_API_KEY as string)
 export const auth = betterAuth({
+  advanced: {
+    cookiePrefix: 'yangua'
+  },
+  session: {
+    expiresIn: 10 // 10 seconds for testing
+  },
   baseURL: getBaseURL(),
   socialProviders: {
     google: {
