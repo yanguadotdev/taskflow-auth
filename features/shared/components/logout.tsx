@@ -9,7 +9,11 @@ export default function Logout() {
   const router = useRouter()
 
   const handleLogout = async () => {
-    await authClient.signOut()
+    try {
+      await authClient.signOut()
+    } catch (error) {
+      console.error(error)
+    }
     router.push('/')
   }
 
